@@ -17,7 +17,7 @@ $purple: #b294bb;
 $max-width: 50em;
 $line-height: 1.5;
 
-@-moz-document domain('images.example.com') {
+@-moz-document domain('news.ycombinator.com') {
 	::-moz-selection {
 		background: $orange !important;
 		color: $background !important;
