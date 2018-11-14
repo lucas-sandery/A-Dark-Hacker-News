@@ -1,4 +1,4 @@
-@namespace "http://www.w3.org/1999/xhtml";
+@namespace 'http://www.w3.org/1999/xhtml';
 
 $background: #1d1f21;
 $current-line: #282a2e;
@@ -23,9 +23,9 @@ $line-height: 1.5;
 		color: $background !important;
 	}
 
-	* {
+	:not(textarea) {
 		font-family: sans-serif !important;
-		color: $foreground;
+		color: $foreground !important;
 	}
 
 	body {
@@ -61,7 +61,6 @@ $line-height: 1.5;
 	}
 
 	font {
-		@extend %text-shadow;
 		color: inherit !important;
 		font-family: inherit !important;
 		font-size: inherit !important;
@@ -79,21 +78,29 @@ $line-height: 1.5;
 		margin: 0 auto !important;
 	}
 
-	body > center > table > tbody > tr:first-child > td {
-		background-color: $orange !important;
+	body > center > table > tbody > tr {
+		&:first-child {
+			position: sticky;
+			top: -1em;
+			z-index: 2;
 
-		* {
-			color: $background !important;
+			> td {
+				padding: 1.5em 0.5em 0.5em;
+				background-color: $orange !important;
+
+				* {
+					color: $background !important;
+				}
+
+				> table {
+					@extend %inner-table;
+				}
+			}
 		}
 
-		> table {
-			@extend %inner-table;
+		&:nth-child(3) > td {
+			padding: 0 0.5em;
 		}
-	}
-
-	body > center > table > tbody > tr:first-child > td,
-	body > center > table > tbody > tr:nth-child(3) > td {
-		padding: 0 0.5em;
 	}
 
 	body > center > table > tbody > tr:nth-child(2),
@@ -107,18 +114,70 @@ $line-height: 1.5;
 		@extend %inner-table;
 	}
 
+	$votelinks-width: 10px;
+	$votelinks-margin-hor: 6px;
+
 	.votelinks {
 		a {
 			display: inline-block !important;
-			margin: 2px 6px 9px !important;
-			width: 10px;
+			margin: 2px $votelinks-margin-hor 9px !important;
+			width: $votelinks-width;
 			height: 10px;
+		}
+	}
+
+	%td-collapse {
+		width: 0;
+		padding: 0 !important;
+	}
+
+	.fatitem,
+	.comment-tree {
+		table-layout: fixed;
+
+		.title,
+		.ind {
+			&:first-child {
+				@extend %td-collapse;
+			}
+		}
+
+		.votelinks {
+			width: $votelinks-width + $votelinks-margin-hor;
+
+			a {
+				margin-left: 0 !important;
+			}
+		}
+	}
+
+	.itemlist {
+		.ind {
+			@extend %td-collapse;
+		}
+	}
+
+	.comment-tree {
+		.ind {
+			img[src="s.gif"] {// restore quotes after compilation :%s/\v(\[src\=)(s\.gif)(])/\1"\2"\3/
+				@media (min-width: 751px) {
+					$w: 40;
+					$i: $w;
+					@while $i <= 840 {
+						&[width="#{$i}"] {
+							width: 1px * $i / 2 !important;
+						}
+						$i: $i + $w;
+					}
+				}
+			}
 		}
 	}
 
 	.votearrow {
 		background: transparent !important;
 		margin: 0;
+		z-index: 1;
 
 		&:before {
 			content: '';
@@ -140,13 +199,8 @@ $line-height: 1.5;
 
 	.title,
 	.comment {
-		* {
-			color: $foreground !important;
-		}
-
 		a {
 			@extend %text-shadow;
-			color: $foreground !important;
 
 			&:visited {
 				color: $foreground-darker !important;
@@ -168,11 +222,17 @@ $line-height: 1.5;
 		}
 	}
 
+	select,
+	textarea,
+	input {
+		color: $background !important;
+		font-size: 10pt;
+	}
+
 	input[type=submit] {
-		background: $green;
-		color: $background;
-		border: none;
-		padding: 0.5em 0.8em;
+		background: $green !important;
+		border: none !important;
+		padding: 0.3em 0.5em !important;
 	}
 
 	.togg {
